@@ -221,7 +221,7 @@ namespace zizhujycom.ResX_Aggregator
             
             // Handle Focus event
             this.editorControl.RichTextBoxControl.GotFocus += new EventHandler(this.OnGotFocus);
-
+            
             // Call the helper function that will do all of the command setup work
             setupCommands();
         }
@@ -1484,6 +1484,10 @@ namespace zizhujycom.ResX_Aggregator
                     // Notify the load or reload
                     NotifyDocChanged();
                 }
+                
+                // Check the resx files
+                var myFileName = this.FileName;
+                MessageBox.Show(myFileName);
             }
             finally
             {
