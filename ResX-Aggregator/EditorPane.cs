@@ -1487,7 +1487,11 @@ namespace zizhujycom.ResX_Aggregator
                 
                 // Check the resx files
                 var myFileName = this.FileName;
-                MessageBox.Show(myFileName);
+                var myFolder = Path.GetDirectoryName(myFileName);
+                var myFileNameWithoutExtension = Path.GetFileNameWithoutExtension(myFileName);
+
+                var cshtmlFileName = myFileNameWithoutExtension;
+                
             }
             finally
             {
