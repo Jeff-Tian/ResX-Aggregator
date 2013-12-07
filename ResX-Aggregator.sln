@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResX-Aggregator_UnitTests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileSystemHelpers", "FileSystemHelpers\FileSystemHelpers.csproj", "{5C8E0F9A-B419-4F84-9F75-F351A773A634}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileSystemHelpers.Specs", "FileSystemHelpers.Specs\FileSystemHelpers.Specs.csproj", "{AAA78AC2-C2C8-46D9-B578-6BF0B731A1E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZiZhuJY.Helpers", "externals\ZiZhuJY\ZiZhuJY.Helpers\ZiZhuJY.Helpers.csproj", "{EF12EE0D-B078-4095-94E2-9DFCDBE3E7B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +41,14 @@ Global
 		{5C8E0F9A-B419-4F84-9F75-F351A773A634}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C8E0F9A-B419-4F84-9F75-F351A773A634}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C8E0F9A-B419-4F84-9F75-F351A773A634}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAA78AC2-C2C8-46D9-B578-6BF0B731A1E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAA78AC2-C2C8-46D9-B578-6BF0B731A1E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAA78AC2-C2C8-46D9-B578-6BF0B731A1E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAA78AC2-C2C8-46D9-B578-6BF0B731A1E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF12EE0D-B078-4095-94E2-9DFCDBE3E7B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF12EE0D-B078-4095-94E2-9DFCDBE3E7B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF12EE0D-B078-4095-94E2-9DFCDBE3E7B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF12EE0D-B078-4095-94E2-9DFCDBE3E7B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

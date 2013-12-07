@@ -19,7 +19,7 @@ namespace ZiZhuJY.FileSystemHelpers
 
         public static string[] SearchFileNames(string directoryName, Regex regex)
         {
-            return Directory.GetFiles(directoryName).Where(fileName => regex.IsMatch(fileName)).ToArray();
+            return Directory.GetFiles(directoryName).Where(fileName => fileName != null && regex.IsMatch(Path.GetFileName(fileName))).Select(Path.GetFileName).ToArray();
         }
     }
 }
