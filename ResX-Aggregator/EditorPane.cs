@@ -1,27 +1,25 @@
 ﻿using System;
 using System.Collections;
-using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.IO;
 using System.Drawing;
 using System.Globalization;
-using System.Windows.Forms;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.TextManager.Interop;
-using Microsoft.VisualStudio.Shell;
+using System.Windows.Forms;
 using EnvDTE;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.TextManager.Interop;
 using tom;
+using ZiZhuJY.FileSystemHelpers;
+using ZiZhuJY.Helpers;
+using zizhujycom.ResX_Aggregator;
 
-using ISysServiceProvider = System.IServiceProvider;
-using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
-using VSStd97CmdID = Microsoft.VisualStudio.VSConstants.VSStd97CmdID;
-
-namespace zizhujycom.ResX_Aggregator
+namespace ZiZhuJY.ResX_Aggregator
 {
     /// <summary>
     /// This control host the editor (an extended RichTextBox) and is responsible for
@@ -1491,7 +1489,7 @@ namespace zizhujycom.ResX_Aggregator
                 var myFileNameWithoutExtension = Path.GetFileNameWithoutExtension(myFileName);
 
                 var cshtmlFileName = myFileNameWithoutExtension;
-                
+                var resxFileNames = FileSystemHelper.SearchFileNames(myFolder, "^{0}.*\\.resx$".FormatWith(myFileNameWithoutExtension));
             }
             finally
             {

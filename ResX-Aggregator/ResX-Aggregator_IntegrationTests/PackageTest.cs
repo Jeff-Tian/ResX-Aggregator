@@ -49,7 +49,7 @@ namespace ResX_Aggregator_IntegrationTests
 
                 //Validate package load
                 IVsPackage package;
-                Guid packageGuid = new Guid(zizhujycom.ResX_Aggregator.GuidList.guidResX_AggregatorPkgString);
+                Guid packageGuid = new Guid(ZiZhuJY.ResX_Aggregator.GuidList.guidResX_AggregatorPkgString);
                 Assert.IsTrue(0 == shellService.LoadPackage(ref packageGuid, out package));
                 Assert.IsNotNull(package, "Package failed to load");
 

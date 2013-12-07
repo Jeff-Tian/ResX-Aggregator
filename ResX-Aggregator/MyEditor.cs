@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Security.Permissions;
 using System.Runtime.InteropServices;
 using tom;
+using ZiZhuJY.ResX_Aggregator;
 
 namespace zizhujycom.ResX_Aggregator
 {

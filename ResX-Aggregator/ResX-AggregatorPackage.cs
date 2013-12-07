@@ -8,6 +8,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
+using ZiZhuJY.ResX_Aggregator;
 
 namespace zizhujycom.ResX_Aggregator
 {
