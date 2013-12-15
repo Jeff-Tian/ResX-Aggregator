@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResXLoader.cs" />
+    <Compile Include="ResXAggregator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\externals\ZiZhuJY\ZiZhuJY.Helpers\ZiZhuJY.Helpers.csproj">
