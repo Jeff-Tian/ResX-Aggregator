@@ -184,7 +184,7 @@ namespace zizhujycom.ResX_Aggregator
             }
 
             // Create the Document (editor)
-            EditorPane NewEditor = new EditorPane(editorPackage);
+            GridEditorPane NewEditor = new GridEditorPane(editorPackage);
             ppunkDocView = Marshal.GetIUnknownForObject(NewEditor);
             ppunkDocData = Marshal.GetIUnknownForObject(NewEditor);
             pbstrEditorCaption = "";

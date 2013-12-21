@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Resources;
@@ -14,13 +15,40 @@ namespace ZiZhuJY.ResX_Aggregator.Core
     public class ResXAggregator
     {
         private readonly Dictionary<string, Dictionary<string, string>> _dictionary;
-        private string _myFullPath;
+        private readonly string _myFullPath;
 
         public Dictionary<string, Dictionary<string, string>> Dictionary
         {
             get
             {
                 return _dictionary;
+            }
+        }
+
+        public DataTable DataTable
+        {
+            get
+            {
+                var dt = new DataTable();
+
+                dt.Columns.Add("Key");
+
+                foreach (var di in Dictionary)
+                {
+                    dt.Rows.Add(di.Key);
+
+                    foreach (var item in di.Value)
+                    {
+                        if (!dt.Columns.Contains(item.Key))
+                        {
+                            dt.Columns.Add(item.Key);
+                        }
+
+                        dt.Rows[dt.Rows.Count - 1][item.Key] = item.Value;
+                    }
+                }
+
+                return dt;
             }
         }
 
@@ -31,7 +59,7 @@ namespace ZiZhuJY.ResX_Aggregator.Core
             var myName = Path.GetFileNameWithoutExtension(resxAggregatorFullPath);
 
             _dictionary = new Dictionary<string, Dictionary<string, string>>();
-            IList<string> resxFileNames = FileSystemHelper.SearchFileNames(directory, "^{0}.resx$".FormatWith(myName)).ToList();
+            IList<string> resxFileNames = FileSystemHelper.SearchFileNames(directory, "^{0}(.*).resx$".FormatWith(myName)).ToList();
             resxFileNames = resxFileNames.Select(e => Path.Combine(directory, e)).ToList();
 
             foreach (var fileName in resxFileNames)

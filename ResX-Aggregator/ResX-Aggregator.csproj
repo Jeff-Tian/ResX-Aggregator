@@ -58,6 +58,7 @@
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
@@ -125,6 +126,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GridEditorPane.cs" />
     <Compile Include="EditorFactory.cs" />
     <Compile Include="EditorPane.cs" />
     <Compile Include="EditorTextBox.cs">
@@ -133,6 +135,13 @@
     <Compile Include="EditorTextBox.designer.cs">
       <DependentUpon>EditorTextBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="GridEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GridEditor.Designer.cs">
+      <DependentUpon>GridEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GridEditorSettings.cs" />
     <Compile Include="IEditor.cs" />
     <Compile Include="MyEditor.cs">
       <SubType>UserControl</SubType>
@@ -162,6 +171,10 @@
     <Compile Include="PkgCmdID.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GridEditorPane.resx">
+      <DependentUpon>GridEditorPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="EditorPane.resx">
       <DependentUpon>EditorPane.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -169,6 +182,9 @@
     <EmbeddedResource Include="EditorTextBox.resx">
       <DependentUpon>EditorTextBox.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GridEditor.resx">
+      <DependentUpon>GridEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MyEditor.resx">
       <SubType>Designer</SubType>
@@ -206,6 +222,10 @@
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{3E82BA31-6DCF-4C61-9AC3-D15EEB501CCE}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\externals\ZiZhuJY\ZiZhuJY.Helpers\ZiZhuJY.Helpers.csproj">
       <Project>{EF12EE0D-B078-4095-94E2-9DFCDBE3E7B2}</Project>
       <Name>ZiZhuJY.Helpers</Name>

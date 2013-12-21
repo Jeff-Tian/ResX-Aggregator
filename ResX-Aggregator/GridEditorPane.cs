@@ -63,7 +63,7 @@ namespace ZiZhuJY.ResX_Aggregator
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     [ComSourceInterfaces(typeof(IVsTextViewEvents))]
     [ComVisible(true)]
-    public sealed class EditorPane : Microsoft.VisualStudio.Shell.WindowPane,
+    public sealed class GridEditorPane : Microsoft.VisualStudio.Shell.WindowPane,
                                 IVsPersistDocData,  //to Enable persistence functionality for document data
                                 IPersistFileFormat, //to enable the programmatic loading or saving of an object 
         //in a format specified by the user.
@@ -90,10 +90,10 @@ namespace ZiZhuJY.ResX_Aggregator
         private static string[] fontSizeArray = { "8", "9", "10", "11", "12", "14", "16", "18",
                                                   "20", "22", "24", "26", "28", "36", "48", "72"};
 
-        private class EditorProperties
+        private class GridEditorProperties
         {
-            private EditorPane editor;
-            public EditorProperties(EditorPane Editor)
+            private GridEditorPane editor;
+            public GridEditorProperties(GridEditorPane Editor)
             {
                 editor = Editor;
             }
@@ -122,7 +122,7 @@ namespace ZiZhuJY.ResX_Aggregator
         // This flag is true when we are asking the QueryEditQuerySave service if we can edit the
         // file. It is used to avoid to have more than one request queued.
         private bool gettingCheckoutStatus;
-        private MyEditor editorControl;
+        private GridEditor editorControl;
 
         private Microsoft.VisualStudio.Shell.SelectionContainer selContainer;
         private ITrackSelection trackSel;
@@ -153,7 +153,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// our initialization functions.
         /// </summary>
         /// <param name="package">Our Package instance.</param>
-        public EditorPane(ResX_AggregatorPackage package)
+        public GridEditorPane(ResX_AggregatorPackage package)
             : base(null)
         {
             PrivateInit(package);
@@ -197,7 +197,7 @@ namespace ZiZhuJY.ResX_Aggregator
 
             // Create the object that will show the document's properties
             // on the properties window.
-            EditorProperties prop = new EditorProperties(this);
+            GridEditorProperties prop = new GridEditorProperties(this);
             listObjects.Add(prop);
 
             // Create the SelectionContainer object.
@@ -207,18 +207,18 @@ namespace ZiZhuJY.ResX_Aggregator
 
             // Create and initialize the editor
 
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditorPane));
-            this.editorControl = new MyEditor();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GridEditorPane));
+            this.editorControl = new GridEditor();
 
             resources.ApplyResources(this.editorControl, "editorControl", CultureInfo.CurrentUICulture);
             // Event handlers for macro recording.
-            this.editorControl.RichTextBoxControl.TextChanged += new System.EventHandler(this.OnTextChange);
-            this.editorControl.RichTextBoxControl.MouseDown += new MouseEventHandler(this.OnMouseClick);
-            this.editorControl.RichTextBoxControl.SelectionChanged += new EventHandler(this.OnSelectionChanged);
-            this.editorControl.RichTextBoxControl.KeyDown += new KeyEventHandler(this.OnKeyDown);
+            this.editorControl.DataGridControl.TextChanged += new System.EventHandler(this.OnTextChange);
+            this.editorControl.DataGridControl.MouseDown += new MouseEventHandler(this.OnMouseClick);
+            this.editorControl.DataGridControl.SelectionChanged += new EventHandler(this.OnSelectionChanged);
+            this.editorControl.DataGridControl.KeyDown += new KeyEventHandler(this.OnKeyDown);
             
             // Handle Focus event
-            this.editorControl.RichTextBoxControl.GotFocus += new EventHandler(this.OnGotFocus);
+            this.editorControl.DataGridControl.GotFocus += new EventHandler(this.OnGotFocus);
             
             // Call the helper function that will do all of the command setup work
             setupCommands();
@@ -265,13 +265,13 @@ namespace ZiZhuJY.ResX_Aggregator
             {
                 if (disposing)
                 {
-                    if (this.editorControl != null && this.editorControl.RichTextBoxControl != null)
+                    if (this.editorControl != null && this.editorControl.DataGridControl != null)
                     {
-                        this.editorControl.RichTextBoxControl.TextChanged -= new System.EventHandler(this.OnTextChange);
-                        this.editorControl.RichTextBoxControl.MouseDown -= new MouseEventHandler(this.OnMouseClick);
-                        this.editorControl.RichTextBoxControl.SelectionChanged -= new EventHandler(this.OnSelectionChanged);
-                        this.editorControl.RichTextBoxControl.KeyDown -= new KeyEventHandler(this.OnKeyDown);
-                        this.editorControl.RichTextBoxControl.GotFocus -= new EventHandler(this.OnGotFocus);
+                        this.editorControl.DataGridControl.TextChanged -= new System.EventHandler(this.OnTextChange);
+                        this.editorControl.DataGridControl.MouseDown -= new MouseEventHandler(this.OnMouseClick);
+                        this.editorControl.DataGridControl.SelectionChanged -= new EventHandler(this.OnSelectionChanged);
+                        this.editorControl.DataGridControl.KeyDown -= new KeyEventHandler(this.OnKeyDown);
+                        this.editorControl.DataGridControl.GotFocus -= new EventHandler(this.OnGotFocus);
                     }
 
                     // Dispose the timers
@@ -290,7 +290,7 @@ namespace ZiZhuJY.ResX_Aggregator
 
                     if (editorControl != null)
                     {
-                        editorControl.RichTextBoxControl.Dispose();
+                        editorControl.DataGridControl.Dispose();
                         editorControl.Dispose();
                         editorControl = null;
                     }
@@ -493,7 +493,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <param name="e">  Not used.</param>
         private void onSelectAll(object sender, EventArgs e)
         {
-            editorControl.RichTextBoxControl.SelectAll();
+            editorControl.DataGridControl.SelectAll();
         }
 
         /// <summary>
@@ -505,7 +505,7 @@ namespace ZiZhuJY.ResX_Aggregator
         private void onQueryCopy(object sender, EventArgs e)
         {
             OleMenuCommand command = (OleMenuCommand)sender;
-            command.Enabled = editorControl.RichTextBoxControl.SelectionLength > 0 ? true : false;
+            command.Enabled = editorControl.DataGridControl.SelectedCells.Count > 0 ? true : false;
         }
 
         /// <summary>
@@ -529,7 +529,7 @@ namespace ZiZhuJY.ResX_Aggregator
         private void onQueryCutOrDelete(object sender, EventArgs e)
         {
             OleMenuCommand command = (OleMenuCommand)sender;
-            command.Enabled = editorControl.RichTextBoxControl.SelectionLength > 0 ? true : false;
+            command.Enabled = editorControl.DataGridControl.SelectedCells.Count > 0 ? true : false;
         }
 
         /// <summary>
@@ -548,7 +548,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// </summary>
         private void onDelete(object sender, EventArgs e)
         {
-            editorControl.RichTextBoxControl.SelectedText = "";
+            editorControl.DataGridControl.SelectedCells.Clear();
             editorControl.RecordCommand("Delete");
         }
 
@@ -560,7 +560,7 @@ namespace ZiZhuJY.ResX_Aggregator
         private void onQueryPaste(object sender, EventArgs e)
         {
             OleMenuCommand command = (OleMenuCommand)sender;
-            command.Enabled = editorControl.RichTextBoxControl.CanPaste(DataFormats.GetFormat(DataFormats.Text));
+            command.Enabled = false;
         }
 
         /// <summary>
@@ -605,7 +605,8 @@ namespace ZiZhuJY.ResX_Aggregator
 
             ErrorHandler.ThrowOnFailure(clipboardCycler.GetAndSelectNextDataObject((IVsToolboxUser)this, out pDO));
 
-            ITextSelection textSelection = editorControl.TextDocument.Selection;
+            ITextSelection textSelection = null;
+            return;
 
             // Get the current position of the start of the current selection. 
             // After the paste the position of the start of current selection
@@ -635,7 +636,7 @@ namespace ZiZhuJY.ResX_Aggregator
         private void onQueryUndo(object sender, EventArgs e)
         {
             OleMenuCommand command = (OleMenuCommand)sender;
-            command.Enabled = editorControl.RichTextBoxControl.CanUndo;
+            command.Enabled = false;
         }
 
         /// <summary>
@@ -645,7 +646,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <param name="e">  Not used.</param>
         private void onUndo(object sender, EventArgs e)
         {
-            editorControl.RichTextBoxControl.Undo();
+            
         }
 
         /// <summary>
@@ -656,7 +657,7 @@ namespace ZiZhuJY.ResX_Aggregator
         private void onQueryRedo(object sender, EventArgs e)
         {
             OleMenuCommand command = (OleMenuCommand)sender;
-            command.Enabled = editorControl.RichTextBoxControl.CanRedo;
+            command.Enabled = false;
         }
 
         /// <summary>
@@ -666,7 +667,6 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <param name="e">  Not used.</param>
         private void onRedo(object sender, EventArgs e)
         {
-            editorControl.RichTextBoxControl.Redo();
         }
 
         /// <summary>
@@ -680,7 +680,7 @@ namespace ZiZhuJY.ResX_Aggregator
         private void onQueryBold(object sender, EventArgs e)
         {
             OleMenuCommand command = (OleMenuCommand)sender;
-            command.Checked = editorControl.RichTextBoxControl.SelectionFont.Bold;
+            command.Checked = false;
         }
 
         /// <summary>
@@ -692,7 +692,6 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <param name="e">  Not used.</param>
         private void onBold(object sender, EventArgs e)
         {
-            setFontStyle(FontStyle.Bold, editorControl.RichTextBoxControl.SelectionFont.Bold);
         }
 
         /// <summary>
@@ -706,7 +705,7 @@ namespace ZiZhuJY.ResX_Aggregator
         private void onQueryItalic(object sender, EventArgs e)
         {
             OleMenuCommand command = (OleMenuCommand)sender;
-            command.Checked = editorControl.RichTextBoxControl.SelectionFont.Italic;
+            command.Checked = false;
         }
 
         /// <summary>
@@ -718,7 +717,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <param name="e">  Not used.</param>
         private void onItalic(object sender, EventArgs e)
         {
-            setFontStyle(FontStyle.Italic, editorControl.RichTextBoxControl.SelectionFont.Italic);
+
         }
 
         /// <summary>
@@ -732,7 +731,7 @@ namespace ZiZhuJY.ResX_Aggregator
         private void onQueryUnderline(object sender, EventArgs e)
         {
             OleMenuCommand command = (OleMenuCommand)sender;
-            command.Checked = editorControl.RichTextBoxControl.SelectionFont.Underline;
+            command.Checked = false;
         }
 
         /// <summary>
@@ -744,7 +743,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <param name="e">  Not used.</param>
         private void onUnderline(object sender, EventArgs e)
         {
-            setFontStyle(FontStyle.Underline, editorControl.RichTextBoxControl.SelectionFont.Underline);
+
         }
 
         /// <summary>
@@ -758,7 +757,7 @@ namespace ZiZhuJY.ResX_Aggregator
         private void onQueryStrikethrough(object sender, EventArgs e)
         {
             OleMenuCommand command = (OleMenuCommand)sender;
-            command.Checked = editorControl.RichTextBoxControl.SelectionFont.Strikeout;
+            command.Checked = false;
         }
 
         /// <summary>
@@ -770,7 +769,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <param name="e">  Not used.</param>
         private void onStrikethrough(object sender, EventArgs e)
         {
-            setFontStyle(FontStyle.Strikeout, editorControl.RichTextBoxControl.SelectionFont.Strikeout);
+
         }
 
         /// <summary>
@@ -783,12 +782,12 @@ namespace ZiZhuJY.ResX_Aggregator
         private void setFontStyle(FontStyle fontStyleToSet, bool currentStateOn)
         {
             // Figure out what the new FontStyle should be based on the current one
-            FontStyle fs = currentStateOn ? editorControl.RichTextBoxControl.SelectionFont.Style & (~fontStyleToSet) :
-                                            editorControl.RichTextBoxControl.SelectionFont.Style | fontStyleToSet;
+            FontStyle fs = currentStateOn ? editorControl.DataGridControl.Font.Style & (~fontStyleToSet) :
+                                            editorControl.DataGridControl.Font.Style | fontStyleToSet;
 
             // Create the new Font based on the current one and fs then set it
-            Font f = new Font(editorControl.RichTextBoxControl.SelectionFont, fs);
-            editorControl.RichTextBoxControl.SelectionFont = f;
+            Font f = new Font(editorControl.DataGridControl.Font, fs);
+            editorControl.DataGridControl.Font = f;
 
             if (f != null)
                 f.Dispose();
@@ -804,7 +803,7 @@ namespace ZiZhuJY.ResX_Aggregator
         private void onQueryJustifyCenter(object sender, EventArgs e)
         {
             OleMenuCommand command = (OleMenuCommand)sender;
-            command.Checked = (editorControl.RichTextBoxControl.SelectionAlignment == HorizontalAlignment.Center);
+            command.Checked = false;
         }
 
         /// <summary>
@@ -814,7 +813,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <param name="e">  Not used.</param>
         private void onJustifyCenter(object sender, EventArgs e)
         {
-            editorControl.RichTextBoxControl.SelectionAlignment = HorizontalAlignment.Center;
+
         }
 
         /// <summary>
@@ -827,7 +826,7 @@ namespace ZiZhuJY.ResX_Aggregator
         private void onQueryJustifyLeft(object sender, EventArgs e)
         {
             OleMenuCommand command = (OleMenuCommand)sender;
-            command.Checked = (editorControl.RichTextBoxControl.SelectionAlignment == HorizontalAlignment.Left);
+            command.Checked = false;
         }
 
         /// <summary>
@@ -837,7 +836,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <param name="e">  Not used.</param>
         private void onJustifyLeft(object sender, EventArgs e)
         {
-            editorControl.RichTextBoxControl.SelectionAlignment = HorizontalAlignment.Left;
+
         }
 
         /// <summary>
@@ -850,7 +849,7 @@ namespace ZiZhuJY.ResX_Aggregator
         private void onQueryJustifyRight(object sender, EventArgs e)
         {
             OleMenuCommand command = (OleMenuCommand)sender;
-            command.Checked = (editorControl.RichTextBoxControl.SelectionAlignment == HorizontalAlignment.Right);
+            command.Checked = false;
         }
 
         /// <summary>
@@ -860,7 +859,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <param name="e">  Not used.</param>
         private void onJustifyRight(object sender, EventArgs e)
         {
-            editorControl.RichTextBoxControl.SelectionAlignment = HorizontalAlignment.Right;
+
         }
 
         /// <summary>
@@ -933,14 +932,14 @@ namespace ZiZhuJY.ResX_Aggregator
             // need to cast it to a string and set it as the font.
             if (null == args.InValue)
             {
-                string currentFont = editorControl.RichTextBoxControl.SelectionFont.FontFamily.Name;
+                string currentFont = editorControl.DataGridControl.Font.FontFamily.Name;
                 Marshal.GetNativeVariantForObject(currentFont, args.OutValue);
             }
             else
             {
                 string fontName = (string)args.InValue;
-                Font f = new Font(fontName, editorControl.RichTextBoxControl.SelectionFont.Size, editorControl.RichTextBoxControl.SelectionFont.Style);
-                editorControl.RichTextBoxControl.SelectionFont = f;
+                Font f = new Font(fontName, editorControl.DataGridControl.Font.Size, editorControl.DataGridControl.Font.Style);
+                editorControl.DataGridControl.Font = f;
 
                 if (f != null)
                     f.Dispose();
@@ -989,14 +988,14 @@ namespace ZiZhuJY.ResX_Aggregator
             // need to cast it to a string and set it as the new font size.
             if (null == args.InValue)
             {
-                string currentSize = Convert.ToString(Convert.ToInt32(editorControl.RichTextBoxControl.SelectionFont.Size), CultureInfo.InvariantCulture);
+                string currentSize = Convert.ToString(Convert.ToInt32(editorControl.DataGridControl.Font.Size), CultureInfo.InvariantCulture);
                 Marshal.GetNativeVariantForObject(currentSize, args.OutValue);
             }
             else
             {
                 string fontSize = (string)args.InValue;
-                Font f = new Font(editorControl.RichTextBoxControl.SelectionFont.FontFamily, Convert.ToSingle(fontSize, CultureInfo.InvariantCulture), editorControl.RichTextBoxControl.SelectionFont.Style);
-                editorControl.RichTextBoxControl.SelectionFont = f;
+                Font f = new Font(editorControl.DataGridControl.Font.FontFamily, Convert.ToSingle(fontSize, CultureInfo.InvariantCulture), editorControl.DataGridControl.Font.Style);
+                editorControl.DataGridControl.Font = f;
 
                 if (f != null)
                     f.Dispose();
@@ -1013,7 +1012,7 @@ namespace ZiZhuJY.ResX_Aggregator
         private void onQueryBulletedList(object sender, EventArgs e)
         {
             OleMenuCommand command = (OleMenuCommand)sender;
-            command.Checked = editorControl.RichTextBoxControl.SelectionBullet;
+            command.Checked = false;
         }
 
         /// <summary>
@@ -1024,7 +1023,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <param name="e">  Not used.</param>
         private void onBulletedList(object sender, EventArgs e)
         {
-            editorControl.RichTextBoxControl.SelectionBullet = !editorControl.RichTextBoxControl.SelectionBullet;
+
         }
 
         /// <summary>
@@ -1040,7 +1039,7 @@ namespace ZiZhuJY.ResX_Aggregator
 
                 // Convert the point to screen coordinates and pass it into
                 // our DisplayContextMenuAt function
-                Point screenCoordinates = this.editorControl.RichTextBoxControl.PointToScreen(mouseDownLocation);
+                Point screenCoordinates = this.editorControl.DataGridControl.PointToScreen(mouseDownLocation);
                 DisplayContextMenuAt(screenCoordinates);
             }
         }
@@ -1078,8 +1077,11 @@ namespace ZiZhuJY.ResX_Aggregator
         /// </summary>
         public float DefaultTabStop
         {
-            get { return editorControl.TextDocument.DefaultTabStop; }
-            set { editorControl.TextDocument.DefaultTabStop = value; }
+            get { return 4.0f; }
+            set
+            {
+                
+            }
         }
 
         /// <summary>
@@ -1088,7 +1090,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// </summary>
         public ITextRange Range
         {
-            get { return editorControl.TextRange; }
+            get { return null; }
         }
 
         /// <summary>
@@ -1097,7 +1099,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// </summary>
         public ITextSelection Selection
         {
-            get { return editorControl.TextSelection; }
+            get { return null; }
         }
 
         /// <summary>
@@ -1106,8 +1108,11 @@ namespace ZiZhuJY.ResX_Aggregator
         /// </summary>
         public int SelectionProperties
         {
-            get { return editorControl.TextSelection.Flags; }
-            set { editorControl.TextSelection.Flags = value; }
+            get { return -1; }
+            set
+            {
+
+            }
         }
 
         /// <summary>
@@ -1118,7 +1123,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <returns> The length of the matched string.</returns>
         public int FindText(string textToFind)
         {
-            return editorControl.TextRange.FindText(textToFind, (int)tom.tomConstants.tomForward, 0);
+            return -1;
         }
 
         /// <summary>
@@ -1141,7 +1146,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <returns> HResult that indicates success/failure.</returns>
         public int TypeText(string textToType)
         {
-            editorControl.TextSelection.TypeText(textToType);
+        
             return VSConstants.S_OK;
         }
 
@@ -1151,8 +1156,6 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <returns> HResult that indicates success/failure.</returns>
         public int Cut()
         {
-            object o = null;
-            editorControl.TextSelection.Cut(out o);
             return VSConstants.S_OK;
         }
 
@@ -1162,8 +1165,6 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <returns> HResult that indicates success/failure.</returns>
         public int Copy()
         {
-            object o = null;
-            editorControl.TextSelection.Copy(out o);
             return VSConstants.S_OK;
         }
 
@@ -1173,8 +1174,6 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <returns> HResult that indicates success/failure.</returns>
         public int Paste()
         {
-            object o = null;
-            editorControl.TextSelection.Paste(ref o, 0);
             return VSConstants.S_OK;
         }
 
@@ -1189,7 +1188,6 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <returns> HResult that indicates success/failure.</returns>
         public int Delete(long unit, long count)
         {
-            editorControl.TextSelection.Delete((int)unit, (int)count);
             return VSConstants.S_OK;
         }
 
@@ -1204,7 +1202,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <returns> The number of units that the cursor moved up.</returns>
         public int MoveUp(int unit, int count, int extend)
         {
-            return editorControl.TextSelection.MoveUp(unit, count, extend);
+            return -1;
         }
 
         /// <summary>
@@ -1218,7 +1216,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <returns> The number of units that the cursor moved down.</returns>
         public int MoveDown(int unit, int count, int extend)
         {
-            return editorControl.TextSelection.MoveDown(unit, count, extend);
+            return -1;
         }
 
         /// <summary>
@@ -1232,7 +1230,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <returns> The number of units that the cursor moved to the left.</returns>
         public int MoveLeft(int unit, int count, int extend)
         {
-            return editorControl.TextSelection.MoveLeft(unit, count, extend);
+            return -1;
         }
 
         /// <summary>
@@ -1246,7 +1244,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <returns> The number of units that the cursor moved to the right.</returns>
         public int MoveRight(int unit, int count, int extend)
         {
-            return editorControl.TextSelection.MoveRight(unit, count, extend);
+            return -1;
         }
 
         /// <summary>
@@ -1261,7 +1259,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// should always be positive since we are moving "forward" in the text buffer.</returns>
         public int EndKey(int unit, int extend)
         {
-            return editorControl.TextSelection.EndKey(unit, extend);
+            return -1;
         }
 
         /// <summary>
@@ -1277,7 +1275,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// should always be negative since we are moving "backward" in the text buffer.</returns>
         public int HomeKey(int unit, int extend)
         {
-            return editorControl.TextSelection.HomeKey(unit, extend);
+            return -1;
         }
 
         #endregion
@@ -1443,11 +1441,11 @@ namespace ZiZhuJY.ResX_Aggregator
                 if (lineRead != null && lineRead.Contains(rtfSignature))
                 {
                     //try loading with Rich Text initially
-                    editorControl.RichTextBoxControl.LoadFile(pszFilename, RichTextBoxStreamType.RichText);
+                    editorControl.LoadFile(pszFilename);
                 }
                 else
                 {
-                    editorControl.RichTextBoxControl.LoadFile(pszFilename, RichTextBoxStreamType.PlainText);
+                    editorControl.LoadFile(pszFilename);
                 }
 
                 isDirty = false;
@@ -1482,6 +1480,9 @@ namespace ZiZhuJY.ResX_Aggregator
                     // Notify the load or reload
                     NotifyDocChanged();
                 }
+                
+                // Start the resx aggregation:
+                editorControl.LoadFile(pszFilename);
             }
             finally
             {
@@ -1543,7 +1544,7 @@ namespace ZiZhuJY.ResX_Aggregator
 
             try
             {
-                editorControl.RichTextBoxControl.SaveFile(pszFilename, RichTextBoxStreamType.RichText);
+                editorControl.SaveFile(pszFilename);
             }
             catch (ArgumentException)
             {
@@ -2000,7 +2001,7 @@ namespace ZiZhuJY.ResX_Aggregator
         {
             try
             {
-                editorControl.RichTextBoxControl.SaveFile(pszBackupFileName);
+                editorControl.SaveFile(pszBackupFileName);
                 backupObsolete = false;
             }
             catch (ArgumentException)
@@ -2056,7 +2057,7 @@ namespace ZiZhuJY.ResX_Aggregator
             if (oleData.GetDataPresent(DataFormats.UnicodeText))
             {
                 object o = null;
-                editorControl.TextSelection.Paste(ref o, 0);
+                
             }
 
             return VSConstants.S_OK;
@@ -2069,7 +2070,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <param name="_isFileReadOnly">Indicates whether the file loaded is Read Only or not</param>
         private void SetReadOnly(bool _isFileReadOnly)
         {
-            this.editorControl.RichTextBoxControl.ReadOnly = _isFileReadOnly;
+            this.editorControl.DataGridControl.ReadOnly = _isFileReadOnly;
 
             //update editor caption with "[Read Only]" or "" as necessary
             IVsWindowFrame frame = (IVsWindowFrame)GetService(typeof(SVsWindowFrame));
@@ -2202,7 +2203,7 @@ namespace ZiZhuJY.ResX_Aggregator
                     {
                         // We can not change the file (e.g. a checkout operation failed),
                         // so undo the change and exit.
-                        editorControl.RichTextBoxControl.Undo();
+                        
                         return;
                     }
 
@@ -2279,7 +2280,7 @@ namespace ZiZhuJY.ResX_Aggregator
 
             // Set the insert mode based on our editorControl.richTextBoxCtrl.Overstrike value.  If 1 is passed
             // in then it will display OVR and if 0 is passed in it will display INS.
-            object insertMode = (object)(this.editorControl.Overstrike ? 1 : 0);
+            object insertMode = (object)(1);
             return statusBar.SetInsMode(ref insertMode);
         }
 
@@ -2297,7 +2298,7 @@ namespace ZiZhuJY.ResX_Aggregator
             if (e.KeyValue == 45)
             {
                 // Toggle our stored insert value
-                this.editorControl.Overstrike = !this.editorControl.Overstrike;
+                
 
                 // Call the function to update the status bar insert mode
                 SetStatusBarInsertMode();
@@ -2338,25 +2339,13 @@ namespace ZiZhuJY.ResX_Aggregator
             // the position of the cursor.  If there is a selection then this value will tell
             // us the position of the "left" side of the selection (the side of the selection that
             // has the smaller index value).
-            int startIndex = editorControl.RichTextBoxControl.SelectionStart;
-
-            // If the cursor is at the end of the selection then we need to add the selection
-            // length to the index value.
-            if ((editorControl.TextSelection.Flags & (int)tom.tomConstants.tomSelStartActive) == 0)
-                startIndex += editorControl.RichTextBoxControl.SelectionLength;
-
-            // Call the function that gets the (zero-based) line index based on the buffer index.
-            int lineNumber = editorControl.RichTextBoxControl.GetLineFromCharIndex(startIndex);
-
-            // To get the (zero-based) character number subtract the index of the first character
-            // on this line from the buffer index.
-            int charNumber = startIndex - editorControl.RichTextBoxControl.GetFirstCharIndexFromLine(lineNumber);
+            int startIndex = 0;
 
             // Call the SetLineChar function, making sure to add one to our line and
             // character values since the values we get from the RichTextBox calls
             // are zero based.
-            object line = (object)(lineNumber + 1);
-            object chr = (object)(charNumber + 1);
+            object line = (object)(1);
+            object chr = (object)(1);
 
             // Call the IVsStatusBar's SetLineChar function and return it's HResult
             return statusBar.SetLineChar(ref line, ref chr);
@@ -2483,23 +2472,6 @@ namespace ZiZhuJY.ResX_Aggregator
             // Now navigate to the specified location (if any)
             if (ErrorHandler.Succeeded(hr) && (null != pts) && (pts.Length > 0))
             {
-                // first set start location
-                int NewPosition = editorControl.RichTextBoxControl.GetFirstCharIndexFromLine(pts[0].iStartLine);
-                NewPosition += pts[0].iStartIndex;
-                if (NewPosition > editorControl.RichTextBoxControl.Text.Length)
-                    NewPosition = editorControl.RichTextBoxControl.Text.Length;
-                editorControl.RichTextBoxControl.SelectionStart = NewPosition;
-
-                // now set the length of the selection
-                NewPosition = editorControl.RichTextBoxControl.GetFirstCharIndexFromLine(pts[0].iEndLine);
-                NewPosition += pts[0].iEndIndex;
-                if (NewPosition > editorControl.RichTextBoxControl.Text.Length)
-                    NewPosition = editorControl.RichTextBoxControl.Text.Length;
-                int length = NewPosition - editorControl.RichTextBoxControl.SelectionStart;
-                if (length >= 0)
-                    editorControl.RichTextBoxControl.SelectionLength = length;
-                else
-                    editorControl.RichTextBoxControl.SelectionLength = 0;
             }
             return hr;
         }
@@ -2513,12 +2485,7 @@ namespace ZiZhuJY.ResX_Aggregator
         {
             if (null == pts || 0 == pts.Length)
                 return VSConstants.E_INVALIDARG;
-
-            pts[0].iStartIndex = editorControl.GetColumnFromIndex(editorControl.RichTextBoxControl.SelectionStart);
-            pts[0].iEndIndex = editorControl.GetColumnFromIndex(editorControl.RichTextBoxControl.SelectionStart + editorControl.RichTextBoxControl.SelectionLength);
-            pts[0].iStartLine = editorControl.RichTextBoxControl.GetLineFromCharIndex(editorControl.RichTextBoxControl.SelectionStart);
-            pts[0].iEndLine = editorControl.RichTextBoxControl.GetLineFromCharIndex(editorControl.RichTextBoxControl.SelectionStart + editorControl.RichTextBoxControl.SelectionLength);
-
+            
             return VSConstants.S_OK;
         }
 
@@ -2589,11 +2556,11 @@ namespace ZiZhuJY.ResX_Aggregator
                 pgrfOptions[0] |= (uint)__VSFINDOPTIONS.FR_ActionMask;      //Find/Replace capabilities
 
                 // Only support selection if something is selected
-                if (editorControl == null || editorControl.RichTextBoxControl.SelectionLength == 0)
+                if (editorControl == null || editorControl.DataGridControl.SelectedCells.Count == 0)
                     pgrfOptions[0] &= ~((uint)__VSFINDOPTIONS.FR_Selection);
 
                 //if the file is read only, don't support replace
-                if (editorControl == null || editorControl.RichTextBoxControl.ReadOnly)
+                if (editorControl == null || editorControl.DataGridControl.ReadOnly)
                     pgrfOptions[0] &= ~((uint)__VSFINDOPTIONS.FR_Replace | (uint)__VSFINDOPTIONS.FR_ReplaceAll);
             }
             return VSConstants.S_OK;
@@ -2619,23 +2586,14 @@ namespace ZiZhuJY.ResX_Aggregator
         private void GetInitialSearchString(out object pvar)
         {
             //If no text is selected, return null
-            if (0 == editorControl.RichTextBoxControl.SelectionLength)
+            if (0 == editorControl.DataGridControl.SelectedCells.Count)
             {
                 pvar = null;
                 return;
             }
 
-            //Now check if multiple lines have been selected
-            int endIndex = editorControl.RichTextBoxControl.SelectionStart + editorControl.RichTextBoxControl.SelectionLength;
-            int endline = editorControl.RichTextBoxControl.GetLineFromCharIndex(endIndex);
-            int startline = editorControl.RichTextBoxControl.GetLineFromCharIndex(editorControl.RichTextBoxControl.SelectionStart);
-            if (startline != endline)
-            {
-                pvar = null;
-                return;
-            }
 
-            pvar = editorControl.RichTextBoxControl.SelectedText;
+            pvar = editorControl.DataGridControl.SelectedCells[0].Value;
         }
 
         #region IVsTextImage members
@@ -2659,7 +2617,7 @@ namespace ZiZhuJY.ResX_Aggregator
         int IVsTextImage.GetLineSize(out int pcLines)
         {
             //get the number of the lines in the control
-            int len = editorControl.RichTextBoxControl.Lines.Length;
+            int len = editorControl.DataGridControl.SelectedCells.Count;
             pcLines = len;
 
             return VSConstants.S_OK;
@@ -2711,48 +2669,6 @@ namespace ZiZhuJY.ResX_Aggregator
             if (null == pchText)
                 return VSConstants.E_INVALIDARG;
 
-            // first set start location
-            int NewPosition = editorControl.RichTextBoxControl.GetFirstCharIndexFromLine(pts[0].iStartLine);
-            NewPosition += pts[0].iStartIndex;
-            if (NewPosition > editorControl.RichTextBoxControl.Text.Length)
-                NewPosition = editorControl.RichTextBoxControl.Text.Length;
-            editorControl.RichTextBoxControl.SelectionStart = NewPosition;
-
-            // now set the length of the selection
-            NewPosition = editorControl.RichTextBoxControl.GetFirstCharIndexFromLine(pts[0].iEndLine);
-            NewPosition += pts[0].iEndIndex;
-            if (NewPosition > editorControl.RichTextBoxControl.Text.Length)
-                NewPosition = editorControl.RichTextBoxControl.Text.Length;
-            int length = NewPosition - editorControl.RichTextBoxControl.SelectionStart;
-            if (length >= 0)
-                editorControl.RichTextBoxControl.SelectionLength = length;
-            else
-                editorControl.RichTextBoxControl.SelectionLength = 0;
-
-            //replace the text
-            editorControl.RichTextBoxControl.SelectedText = pchText;
-
-            if ((dwFlags & (uint)__VSFINDOPTIONS.FR_Backwards) == 0)
-            {
-                // In case of forward search we have to place the insertion point at the
-                // end of the new text, so it will be skipped during the next call to Find.
-                editorControl.RichTextBoxControl.SelectionStart += editorControl.RichTextBoxControl.SelectionLength;
-            }
-            else
-            {
-                // If the search is backward, then set the end postion at the
-                // beginning of the new text.
-                editorControl.RichTextBoxControl.SelectionLength = 0;
-            }
-
-            //set the ptsChanged to the TextSpan of the replaced text
-            if (null != ptsChanged && ptsChanged.Length > 0)
-            {
-                ptsChanged[0].iStartIndex = editorControl.GetColumnFromIndex(editorControl.RichTextBoxControl.SelectionStart);
-                ptsChanged[0].iEndIndex = editorControl.GetColumnFromIndex(editorControl.RichTextBoxControl.SelectionStart + editorControl.RichTextBoxControl.SelectionLength);
-                ptsChanged[0].iStartLine = editorControl.RichTextBoxControl.GetLineFromCharIndex(editorControl.RichTextBoxControl.SelectionStart);
-                ptsChanged[0].iEndLine = editorControl.RichTextBoxControl.GetLineFromCharIndex(editorControl.RichTextBoxControl.SelectionStart + editorControl.RichTextBoxControl.SelectionLength);
-            }
 
             return VSConstants.S_OK;
         }
@@ -2769,15 +2685,6 @@ namespace ZiZhuJY.ResX_Aggregator
             if (null == pts || 0 == pts.Length)
                 return VSConstants.E_INVALIDARG;
 
-            int startIndex = editorControl.GetIndexFromLineAndColumn(pts[0].iStartLine, pts[0].iStartIndex);
-            if (startIndex < 0)
-                return VSConstants.E_INVALIDARG;
-
-            int endIndex = editorControl.GetIndexFromLineAndColumn(pts[0].iEndLine, pts[0].iEndIndex);
-            if (endIndex < 0)
-                return VSConstants.E_INVALIDARG;
-
-            pcch = Math.Abs(endIndex - startIndex);
 
             return VSConstants.S_OK;
         }
@@ -2822,7 +2729,7 @@ namespace ZiZhuJY.ResX_Aggregator
             {
                 return VSConstants.E_INVALIDARG;
             }
-            piLength = editorControl.RichTextBoxControl.Lines[iLine].Length;
+            piLength = editorControl.DataGridControl.SelectedCells.Count;
 
             return VSConstants.S_OK;
         }
@@ -2856,14 +2763,14 @@ namespace ZiZhuJY.ResX_Aggregator
             pLineData[0].dwReserved = 0;
             pLineData[0].pAtomicTextChain = IntPtr.Zero;
 
-            int lineCount = editorControl.RichTextBoxControl.Lines.Length;
+            int lineCount = editorControl.DataGridControl.Rows.Count;
             if ((iLine < 0) || (iLine >= lineCount) || (iStartIndex < 0) || (iEndIndex < 0) ||
                 (iStartIndex > iEndIndex))
             {
                 return VSConstants.E_INVALIDARG;
             }
 
-            string lineText = editorControl.RichTextBoxControl.Lines[iLine];
+            string lineText = editorControl.DataGridControl.Rows[iLine].Cells[0].Value.ToString();
             // If the line is empty then do not attempt to calculate the span in the normal way; just return.
             if (string.IsNullOrEmpty(lineText) && iStartIndex == 0 && iEndIndex == 0)
                 return VSConstants.S_OK;
@@ -3151,10 +3058,10 @@ namespace ZiZhuJY.ResX_Aggregator
             piLine = 0;
             piIndex = 0;
 
-            int totalLines = editorControl.RichTextBoxControl.Lines.Length;
+            int totalLines = editorControl.DataGridControl.Rows.Count;
             if (totalLines > 0)
                 piLine = totalLines - 1;
-            int lineLen = editorControl.RichTextBoxControl.Lines[piLine].Length;
+            int lineLen = editorControl.DataGridControl.Rows[piLine].Cells.Count;
             piIndex = lineLen >= 1 ? lineLen - 1 : lineLen;
 
             return VSConstants.S_OK;
@@ -3163,19 +3070,19 @@ namespace ZiZhuJY.ResX_Aggregator
         public int GetLengthOfLine(int iLine, out int piLength)
         {
             piLength = 0;
-            int totalLines = editorControl.RichTextBoxControl.Lines.Length;
+            int totalLines = editorControl.DataGridControl.Rows.Count;
 
             if (iLine < 0 || iLine >= totalLines)
                 return VSConstants.E_INVALIDARG;
 
-            piLength = editorControl.RichTextBoxControl.Lines[iLine].Length;
+            piLength = editorControl.DataGridControl.Rows[iLine].Cells.Count;
 
             return VSConstants.S_OK;
         }
 
         public int GetLineCount(out int piLineCount)
         {
-            piLineCount = editorControl.RichTextBoxControl.Lines.Length;
+            piLineCount = editorControl.DataGridControl.Rows.Count;
             return VSConstants.E_NOTIMPL;
         }
 
@@ -3517,21 +3424,6 @@ namespace ZiZhuJY.ResX_Aggregator
 
         int IVsTextView.SetSelection(int iAnchorLine, int iAnchorCol, int iEndLine, int iEndCol)
         {
-            // first set start location
-            int startPosition = editorControl.GetIndexFromLineAndColumn(iAnchorLine, iAnchorCol);
-            if (startPosition < 0)
-                return VSConstants.E_INVALIDARG;
-            editorControl.RichTextBoxControl.SelectionStart = startPosition;
-
-            // now set the length of the selection
-            int endPosition = editorControl.GetIndexFromLineAndColumn(iEndLine, iEndCol);
-            if (endPosition < 0)
-                return VSConstants.E_INVALIDARG;
-            int length = endPosition - editorControl.RichTextBoxControl.SelectionStart;
-            if (length >= 0)
-                editorControl.RichTextBoxControl.SelectionLength = length;
-            else
-                editorControl.RichTextBoxControl.SelectionLength = 0;
             return VSConstants.S_OK;
         }
 

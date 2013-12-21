@@ -67,7 +67,7 @@ namespace ZiZhuJY.ResX_Aggregator.Core.Specs
                 foreach (var column in row.Keys)
                 {
                     i++;
-                    if(i==0)continue;
+                    if(i==1)continue;
 
                     Assert.AreEqual(true, dic.ContainsKey(column));
                     Assert.AreEqual(row[column], dic[column]);
