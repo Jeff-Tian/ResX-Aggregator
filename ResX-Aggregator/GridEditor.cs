@@ -1,15 +1,14 @@
 ﻿using System.Windows.Forms;
-using EnvDTE;
 using ZiZhuJY.ResX_Aggregator.Core;
 using zizhujycom.ResX_Aggregator;
-using ConfigurationManager = System.Configuration.ConfigurationManager;
 
 namespace ZiZhuJY.ResX_Aggregator
 {
     public partial class GridEditor : UserControl
     {
         private string m_TextToRecord;
-        private VSMacroRecorder m_Recorder;
+        private readonly VSMacroRecorder m_Recorder;
+        private ResXAggregator m_resxAgg;
 
         public GridEditor()
         {
@@ -18,13 +17,7 @@ namespace ZiZhuJY.ResX_Aggregator
             m_Recorder = new VSMacroRecorder(GuidList.guidResX_AggregatorEditorFactory);
         }
 
-        public DataGridView DataGridControl
-        {
-            get
-            {
-                return this.dataGridView1;
-            }
-        }
+        public DataGridView DataGridControl { get; private set; }
 
         #region Macro Recording methods
 
@@ -287,14 +280,18 @@ namespace ZiZhuJY.ResX_Aggregator
 
         public void SaveFile(string fileName)
         {
+            if (m_resxAgg == null) return;
 
+            m_resxAgg.Save();
         }
 
         public void LoadFile(string fileName)
         {
-            var resxAgg = new ResXAggregator(fileName);
+            m_resxAgg = new ResXAggregator(fileName);
 
-            DataGridControl.DataSource = resxAgg.DataTable;
+            DataGridControl.DataSource = null;
+            DataGridControl.DataSource = m_resxAgg.DataTable;
+            //DataGridControl.DataMember = m_resxAgg.DataTable.TableName;
             DataGridControl.Columns[0].Frozen = true;
 
             var maxColumnWidth = GridEditorSettings.ColumnMaxWidth;
@@ -308,8 +305,19 @@ namespace ZiZhuJY.ResX_Aggregator
                 column.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                 column.Width = maxColumnWidth;
             }
+
         }
 
         #endregion
+
+        private void dataGridView1_BindingContextChanged(object sender, System.EventArgs e)
+        {
+            //MessageBox.Show("Binding Context Changed.");
+        }
+
+        private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            //MessageBox.Show("Cell value changed.");
+        }
     }
 }

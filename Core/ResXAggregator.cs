@@ -7,6 +7,7 @@ using System.Linq;
 using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using ZiZhuJY.FileSystemHelpers;
 using ZiZhuJY.Helpers;
 
@@ -25,8 +26,9 @@ namespace ZiZhuJY.ResX_Aggregator.Core
             }
         }
 
-        public DataTable DataTable
-        {
+        public DataTable DataTable { get; private set; }
+
+        /*
             get
             {
                 var dt = new DataTable();
@@ -50,7 +52,24 @@ namespace ZiZhuJY.ResX_Aggregator.Core
 
                 return dt;
             }
-        }
+
+            set
+            {
+                MessageBox.Show("SEt");
+                var dt = value;
+                _dictionary.Clear();
+                foreach (DataRow row in dt.Rows)
+                {
+                    var cultures = new Dictionary<string, string>();
+
+                    for (var i = 1; i < row.Table.Columns.Count; i++)
+                    {
+                        cultures.Add(row.Table.Columns[i].ColumnName, row[i].ToString());
+                    }
+
+                    _dictionary.Add(row[0].ToString(), cultures);
+                }
+            }*/
 
         public ResXAggregator(string resxAggregatorFullPath)
         {
@@ -101,10 +120,38 @@ namespace ZiZhuJY.ResX_Aggregator.Core
                     fileStream.Close();
                 }
             }
+
+            GenerateDataTableFromDictionary();
+        }
+
+        private void GenerateDataTableFromDictionary()
+        {
+            var dt = new DataTable();
+
+            dt.Columns.Add("Key");
+
+            foreach (var di in Dictionary)
+            {
+                dt.Rows.Add(di.Key);
+
+                foreach (var item in di.Value)
+                {
+                    if (!dt.Columns.Contains(item.Key))
+                    {
+                        dt.Columns.Add(item.Key);
+                    }
+
+                    dt.Rows[dt.Rows.Count - 1][item.Key] = item.Value;
+                }
+            }
+
+            this.DataTable = dt;
         }
 
         public void Save()
         {
+            UpdateDictionaryFromDataTable();
+
             var dic = GetAllCultureResxFileNames();
 
             foreach (var item in dic)
@@ -116,6 +163,23 @@ namespace ZiZhuJY.ResX_Aggregator.Core
                 }
 
                 Save(item.Key, fullPath);
+            }
+        }
+
+        private void UpdateDictionaryFromDataTable()
+        {
+            var dt = DataTable;
+            _dictionary.Clear();
+            foreach (DataRow row in dt.Rows)
+            {
+                var cultures = new Dictionary<string, string>();
+
+                for (var i = 1; i < row.Table.Columns.Count; i++)
+                {
+                    cultures.Add(row.Table.Columns[i].ColumnName, row[i].ToString());
+                }
+
+                _dictionary.Add(row[0].ToString(), cultures);
             }
         }
 
