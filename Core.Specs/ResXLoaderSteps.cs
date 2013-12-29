@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Resources;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 
 namespace ZiZhuJY.ResX_Aggregator.Core.Specs
 {
@@ -79,20 +81,17 @@ namespace ZiZhuJY.ResX_Aggregator.Core.Specs
         public void GivenIEditedTheResx_AggregatorFileAndItLooksLikeThisNow(Table table)
         {
             _resxAggregator = new ResXAggregator(_resxAggregatorFileFullPath);
-            _resxAggregator.Dictionary.Clear();
 
+            _resxAggregator.DataTable.Clear();
+            _resxAggregator.DataTable.Columns.Clear();
+
+            foreach (var col in table.Header)
+            {
+                _resxAggregator.DataTable.Columns.Add(col);
+            }
             foreach (var row in table.Rows)
             {
-                _resxAggregator.Dictionary.Add(row["Name"], new Dictionary<string, string>());
-
-                var i = 0;
-                foreach (var column in row)
-                {
-                    i++;
-                    if (i == 1) continue;
-
-                    _resxAggregator.Dictionary[row["Name"]].Add(column.Key, column.Value);
-                }
+                _resxAggregator.DataTable.Rows.Add(row.Values.ToArray());
             }
         }
 

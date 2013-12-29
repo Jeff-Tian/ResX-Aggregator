@@ -23,7 +23,7 @@ namespace ZiZhuJY.ResX_Aggregator.Core
             }
         }
 
-        public DataTable DataTable { get; private set; }
+        public DataTable DataTable { get; set; }
 
         public ResXAggregator(string resxAggregatorFullPath)
         {
