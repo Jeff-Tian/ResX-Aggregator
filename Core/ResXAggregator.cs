@@ -5,9 +5,6 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Resources;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using ZiZhuJY.FileSystemHelpers;
 using ZiZhuJY.Helpers;
 

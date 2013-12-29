@@ -15,8 +15,6 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 using tom;
-using ZiZhuJY.FileSystemHelpers;
-using ZiZhuJY.Helpers;
 using zizhujycom.ResX_Aggregator;
 
 namespace ZiZhuJY.ResX_Aggregator
