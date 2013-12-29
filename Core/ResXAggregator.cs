@@ -28,49 +28,6 @@ namespace ZiZhuJY.ResX_Aggregator.Core
 
         public DataTable DataTable { get; private set; }
 
-        /*
-            get
-            {
-                var dt = new DataTable();
-
-                dt.Columns.Add("Key");
-
-                foreach (var di in Dictionary)
-                {
-                    dt.Rows.Add(di.Key);
-
-                    foreach (var item in di.Value)
-                    {
-                        if (!dt.Columns.Contains(item.Key))
-                        {
-                            dt.Columns.Add(item.Key);
-                        }
-
-                        dt.Rows[dt.Rows.Count - 1][item.Key] = item.Value;
-                    }
-                }
-
-                return dt;
-            }
-
-            set
-            {
-                MessageBox.Show("SEt");
-                var dt = value;
-                _dictionary.Clear();
-                foreach (DataRow row in dt.Rows)
-                {
-                    var cultures = new Dictionary<string, string>();
-
-                    for (var i = 1; i < row.Table.Columns.Count; i++)
-                    {
-                        cultures.Add(row.Table.Columns[i].ColumnName, row[i].ToString());
-                    }
-
-                    _dictionary.Add(row[0].ToString(), cultures);
-                }
-            }*/
-
         public ResXAggregator(string resxAggregatorFullPath)
         {
             _myFullPath = resxAggregatorFullPath;

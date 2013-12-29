@@ -291,7 +291,6 @@ namespace ZiZhuJY.ResX_Aggregator
 
             DataGridControl.DataSource = null;
             DataGridControl.DataSource = m_resxAgg.DataTable;
-            //DataGridControl.DataMember = m_resxAgg.DataTable.TableName;
             DataGridControl.Columns[0].Frozen = true;
 
             var maxColumnWidth = GridEditorSettings.ColumnMaxWidth;
