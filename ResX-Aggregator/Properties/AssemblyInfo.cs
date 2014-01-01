@@ -29,8 +29,8 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.1.0.0")]
+[assembly: AssemblyFileVersion("1.1.0.0")]
 
 [assembly: InternalsVisibleTo("ResX-Aggregator_IntegrationTests, PublicKey=0024000004800000940000000602000000240000525341310004000001000100f35ad1dddc4847d56606526c7cc07b859b2f82a211f1f9647c2ec3b9594b4f37fc0f7a459137aafd31da9c29352cad467f44941b7a2dc61cbc110627dac9009758acced6afae4a25a93ddcb2c53ac1cfc0cebf3eb8fd2b0cb328e24b9bea470102bc932757b4cdf429b82bcd69a932b6686428eab2ba1ad0259159f2f8320995")]
 [assembly: InternalsVisibleTo("ResX-Aggregator_UnitTests, PublicKey=0024000004800000940000000602000000240000525341310004000001000100f35ad1dddc4847d56606526c7cc07b859b2f82a211f1f9647c2ec3b9594b4f37fc0f7a459137aafd31da9c29352cad467f44941b7a2dc61cbc110627dac9009758acced6afae4a25a93ddcb2c53ac1cfc0cebf3eb8fd2b0cb328e24b9bea470102bc932757b4cdf429b82bcd69a932b6686428eab2ba1ad0259159f2f8320995")]
