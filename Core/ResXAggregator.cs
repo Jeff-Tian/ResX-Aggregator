@@ -149,6 +149,8 @@ namespace ZiZhuJY.ResX_Aggregator.Core
                         if (!item.Value.ContainsKey(culture)) continue;
 
                         var value = item.Value[culture];
+
+                        if (string.IsNullOrEmpty(value)) continue;
                         resxWriter.AddResource(key, value);
                     }
 

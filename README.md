@@ -3,7 +3,7 @@ ResX-Aggregator
 
 Easy the resource(.resx) file editing. 
 
-** Feature **
+**Feature**
 
 Aggregate all the .resx files into one editor.
 
@@ -21,6 +21,8 @@ Now with ResXAggregator, you can add a file that named "index.cshtml.resx-aggreg
 	| CloseMsg        | Stäng meddelandefönstret | Close message window | 关闭消息窗口 |
 	| CloseTips       | Stäng hjälp              | Close help           | 关闭帮助     |
 
-** Screenshot **
+**Screenshot**
 
 ![Screenshot for ResXAggregator's UI](ResX-Aggregator/Templates/ResXAggregator.png "Screenshot for ResXAggregator's UI")
+
+![Use ResX-Aggregator in BlogEngine.NET project](ResX-Aggregator/Templates/Use ResXAggregator in BlogEngine.NET.png "Use ResX-Aggregator in BlogEngine.NET project")
