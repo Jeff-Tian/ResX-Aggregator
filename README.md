@@ -4,6 +4,7 @@ ResX-Aggregator
 Easy the resource(.resx) file editing. 
 
 ** Feature **
+
 Aggregate all the .resx files into one editor.
 
 If you have these .resx files under a folder:
@@ -21,4 +22,5 @@ Now with ResXAggregator, you can add a file that named "index.cshtml.resx-aggreg
 	| CloseTips       | Stäng hjälp              | Close help           | 关闭帮助     |
 
 ** Screenshot **
+
 ![Screenshot for ResXAggregator's UI](ResX-Aggregator/Templates/ResXAggregator.png "Screenshot for ResXAggregator's UI")
