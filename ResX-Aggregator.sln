@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AD49784E-C2DA-4733-89C6-DAD7F37471A0}"
 	ProjectSection(SolutionItems) = preProject
 		IntegrationTests.testsettings = IntegrationTests.testsettings
+		README.md = README.md
 		ResX-Aggregator.vsmdi = ResX-Aggregator.vsmdi
 		UnitTests.testsettings = UnitTests.testsettings
 	EndProjectSection

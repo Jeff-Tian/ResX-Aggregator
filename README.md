@@ -26,3 +26,9 @@ Now with ResXAggregator, you can add a file that named "index.cshtml.resx-aggreg
 ![Screenshot for ResXAggregator's UI](ResX-Aggregator/Templates/ResXAggregator.png "Screenshot for ResXAggregator's UI")
 
 ![Use ResX-Aggregator in BlogEngine.NET project](ResX-Aggregator/Templates/Use ResXAggregator in BlogEngine.NET.png "Use ResX-Aggregator in BlogEngine.NET project")
+
+**Release Notes**
+
+V1.3	2014-2-14
+- Fixed ["Can't copy the text inside the cells #3"](https://github.com/Jeff-Tian/ResX-Aggregator/issues/3)
+- Fixed ["When trying to delete an item from the grid editor, it fails with error: The collection is readonly. #1"](https://github.com/Jeff-Tian/ResX-Aggregator/issues/1)
