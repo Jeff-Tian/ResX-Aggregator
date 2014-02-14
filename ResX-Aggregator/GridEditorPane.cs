@@ -546,7 +546,11 @@ namespace ZiZhuJY.ResX_Aggregator
         /// </summary>
         private void onDelete(object sender, EventArgs e)
         {
-            editorControl.DataGridControl.SelectedCells.Clear();
+            for (var i = 0; i < editorControl.DataGridControl.SelectedRows.Count; i++)
+            {
+                editorControl.DataGridControl.Rows.RemoveAt(editorControl.DataGridControl.SelectedRows[i].Index);
+            }
+
             editorControl.RecordCommand("Delete");
         }
 

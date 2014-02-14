@@ -141,6 +141,9 @@ namespace ZiZhuJY.ResX_Aggregator.Core
         {
             using (var fileStream = File.OpenWrite(fullPath))
             {
+                fileStream.SetLength(0);
+                fileStream.Flush();
+
                 using (var resxWriter = new ResXResourceWriter(fileStream))
                 {
                     foreach (var item in Dictionary)

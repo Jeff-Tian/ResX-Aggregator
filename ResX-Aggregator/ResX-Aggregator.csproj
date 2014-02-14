@@ -202,7 +202,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Templates\About.cshtml.resx" />
+    <EmbeddedResource Include="Templates\About.cshtml.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Templates\About.cshtml.zh-CN.resx" />
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
@@ -211,7 +213,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="LICENSE">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -221,6 +225,7 @@
     </None>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="Templates\About.cshtml.resx-aggregator">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -256,7 +261,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\File.ico" />
+    <Content Include="Resources\File.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\Package.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
