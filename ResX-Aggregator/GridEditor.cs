@@ -17,7 +17,20 @@ namespace ZiZhuJY.ResX_Aggregator
             m_Recorder = new VSMacroRecorder(GuidList.guidResX_AggregatorEditorFactory);
         }
 
-        public DataGridView DataGridControl { get; private set; }
+        private DataGridView _dataGridControl;
+
+        public DataGridView DataGridControl
+        {
+            get
+            {
+                return this._dataGridControl;
+            }
+
+            private set
+            {
+                this._dataGridControl = value;
+            }
+        }
 
         #region Macro Recording methods
 

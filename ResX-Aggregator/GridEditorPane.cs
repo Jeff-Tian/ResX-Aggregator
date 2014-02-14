@@ -214,10 +214,10 @@ namespace ZiZhuJY.ResX_Aggregator
             this.editorControl.DataGridControl.MouseDown += new MouseEventHandler(this.OnMouseClick);
             this.editorControl.DataGridControl.SelectionChanged += new EventHandler(this.OnSelectionChanged);
             this.editorControl.DataGridControl.KeyDown += new KeyEventHandler(this.OnKeyDown);
-            
+
             // Handle Focus event
             this.editorControl.DataGridControl.GotFocus += new EventHandler(this.OnGotFocus);
-            
+
             // Call the helper function that will do all of the command setup work
             setupCommands();
         }
@@ -329,7 +329,8 @@ namespace ZiZhuJY.ResX_Aggregator
             uint itemID;
             IntPtr docData = IntPtr.Zero;
 
-            try {
+            try
+            {
                 // Lock the document
                 int hr = runningDocTable.FindAndLockDocument(
                     (uint)_VSRDTFLAGS.RDT_ReadLock,
@@ -648,7 +649,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <param name="e">  Not used.</param>
         private void onUndo(object sender, EventArgs e)
         {
-            
+
         }
 
         /// <summary>
@@ -1082,7 +1083,7 @@ namespace ZiZhuJY.ResX_Aggregator
             get { return 4.0f; }
             set
             {
-                
+
             }
         }
 
@@ -1148,7 +1149,7 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <returns> HResult that indicates success/failure.</returns>
         public int TypeText(string textToType)
         {
-        
+
             return VSConstants.S_OK;
         }
 
@@ -1167,7 +1168,72 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <returns> HResult that indicates success/failure.</returns>
         public int Copy()
         {
-            return VSConstants.S_OK;
+            if (editorControl.DataGridControl.GetCellCount(DataGridViewElementStates.Selected) <= 0)
+                return VSConstants.S_FALSE;
+
+            try
+            {
+                var contents = editorControl.DataGridControl.GetClipboardContent();
+                if (contents == null)
+                {
+                    var stringContents = string.Empty;
+
+                    for (var i = 0; i < editorControl.DataGridControl.SelectedRows.Count - 1; i++)
+                    {
+                        var row = string.Empty;
+
+                        for (var j = 0; j < editorControl.DataGridControl.SelectedRows[i].Cells.Count; j++)
+                        {
+                            row += editorControl.DataGridControl.SelectedRows[i].Cells[j].Value +
+                                   ((j + 1) == editorControl.DataGridControl.SelectedRows[i].Cells.Count
+                                       ? string.Empty
+                                       : "\t");
+                        }
+
+                        stringContents += row +
+                                          ((i + 1) == editorControl.DataGridControl.Rows.Count ? string.Empty : "\n");
+                    }
+
+                    if (string.IsNullOrEmpty(stringContents))
+                    {
+                        var cells = editorControl.DataGridControl.SelectedCells;
+                        var lastRow = -1;
+                        var lastCol = -1;
+                        for (var i = 0; i < cells.Count; i++)
+                        {
+                            var cell = cells[i];
+                            var row = cell.RowIndex;
+                            var col = cell.ColumnIndex;
+
+                            stringContents += cells[i].Value;
+
+                            if (lastRow != -1 && row != lastRow)
+                            {
+                                stringContents += "\n";
+                            }
+                            else if(lastCol != -1 && col != lastCol)
+                            {
+                                stringContents += "\t";
+                            }
+
+                            lastRow = row;
+                            lastCol = col;
+                        }
+                    }
+
+                    Clipboard.SetText(stringContents);
+                }
+                else
+                {
+                    Clipboard.SetDataObject(contents);
+                }
+
+                return VSConstants.S_OK;
+            }
+            catch (System.Runtime.InteropServices.ExternalException ex)
+            {
+                throw new Exception("The Clipboard could not be accessed.", ex);
+            }
         }
 
         /// <summary>
@@ -1482,7 +1548,7 @@ namespace ZiZhuJY.ResX_Aggregator
                     // Notify the load or reload
                     NotifyDocChanged();
                 }
-                
+
                 // Start the resx aggregation:
                 editorControl.LoadFile(pszFilename);
             }
@@ -2059,7 +2125,7 @@ namespace ZiZhuJY.ResX_Aggregator
             if (oleData.GetDataPresent(DataFormats.UnicodeText))
             {
                 object o = null;
-                
+
             }
 
             return VSConstants.S_OK;
@@ -2205,7 +2271,7 @@ namespace ZiZhuJY.ResX_Aggregator
                     {
                         // We can not change the file (e.g. a checkout operation failed),
                         // so undo the change and exit.
-                        
+
                         return;
                     }
 
@@ -2219,6 +2285,15 @@ namespace ZiZhuJY.ResX_Aggregator
                     }
                     backupObsolete = true;
                 }
+            }
+
+            if (isDirty)
+            {
+                
+            }
+            else
+            {
+                
             }
         }
 
@@ -2300,7 +2375,7 @@ namespace ZiZhuJY.ResX_Aggregator
             if (e.KeyValue == 45)
             {
                 // Toggle our stored insert value
-                
+
 
                 // Call the function to update the status bar insert mode
                 SetStatusBarInsertMode();
@@ -2487,7 +2562,7 @@ namespace ZiZhuJY.ResX_Aggregator
         {
             if (null == pts || 0 == pts.Length)
                 return VSConstants.E_INVALIDARG;
-            
+
             return VSConstants.S_OK;
         }
 
