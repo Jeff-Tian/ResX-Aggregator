@@ -159,23 +159,6 @@ namespace ZiZhuJY.ResX_Aggregator
 
         protected override void OnClose()
         {
-            if (isDirty)
-            {
-                var result =
-                    MessageBox.Show("There are unsaved changes, do you want to save them before closing?",
-                        "ResX-Aggregator", MessageBoxButtons.YesNoCancel);
-
-                if (result == DialogResult.Yes)
-                {
-                    editorControl.SaveFile();
-                }
-
-                if (result == DialogResult.Cancel)
-                {
-                    return;
-                }
-            }
-
             editorControl.StopRecorder();
 
             base.OnClose();
@@ -224,6 +207,10 @@ namespace ZiZhuJY.ResX_Aggregator
 
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GridEditorPane));
             this.editorControl = new GridEditor();
+            this.editorControl.TextChanged += (sender, args) =>
+            {
+                this.isDirty = true;
+            };
 
             resources.ApplyResources(this.editorControl, "editorControl", CultureInfo.CurrentUICulture);
             // Event handlers for macro recording.
@@ -252,7 +239,12 @@ namespace ZiZhuJY.ResX_Aggregator
         /// </summary>
         public bool DataChanged
         {
-            get { return isDirty; }
+            get
+            {
+                isDirty = isDirty || editorControl.DataChanged;
+
+                return isDirty;
+            }
         }
 
         /// <summary>

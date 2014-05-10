@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using ZiZhuJY.ResX_Aggregator.Core;
 using zizhujycom.ResX_Aggregator;
 
@@ -9,6 +10,15 @@ namespace ZiZhuJY.ResX_Aggregator
         private string m_TextToRecord;
         private readonly VSMacroRecorder m_Recorder;
         private ResXAggregator m_resxAgg;
+        private bool isDirty = false;
+
+        public bool DataChanged
+        {
+            get
+            {
+                return isDirty;
+            }
+        }
 
         public GridEditor()
         {
@@ -329,6 +339,7 @@ namespace ZiZhuJY.ResX_Aggregator
 
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
+            isDirty = true;
             //MessageBox.Show("Cell value changed.");
         }
     }
