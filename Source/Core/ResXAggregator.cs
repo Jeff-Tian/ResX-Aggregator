@@ -153,7 +153,8 @@ namespace ZiZhuJY.ResX_Aggregator.Core
 
                         var value = item.Value[culture];
 
-                        if (string.IsNullOrEmpty(value)) continue;
+                        // We should allow empty values.
+                        //if (string.IsNullOrEmpty(value)) continue;
                         resxWriter.AddResource(key, value);
                     }
 

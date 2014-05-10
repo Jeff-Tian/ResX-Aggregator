@@ -151,6 +151,6 @@
     <value>Jeff Tian</value>
   </data>
   <data name="test" xml:space="preserve">
-    <value>test again</value>
+    <value />
   </data>
 </root>

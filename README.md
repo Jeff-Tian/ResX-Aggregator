@@ -32,6 +32,7 @@ Now with ResXAggregator, you can add a file that named "index.cshtml.resx-aggreg
 v1.4	2014-5-10
 - Support more visual studio versions.
 - New ["When contents get modified, add a * next to the tab title."](https://github.com/Jeff-Tian/ResX-Aggregator/issues/5)
+- Fixed ["Delete key doesn't work in the cells."](https://github.com/Jeff-Tian/ResX-Aggregator/issues/8)
 
 V1.3	2014-2-14
 - Fixed ["Can't copy the text inside the cells #3"](https://github.com/Jeff-Tian/ResX-Aggregator/issues/3)
