@@ -32,3 +32,7 @@ Now with ResXAggregator, you can add a file that named "index.cshtml.resx-aggreg
 V1.3	2014-2-14
 - Fixed ["Can't copy the text inside the cells #3"](https://github.com/Jeff-Tian/ResX-Aggregator/issues/3)
 - Fixed ["When trying to delete an item from the grid editor, it fails with error: The collection is readonly. #1"](https://github.com/Jeff-Tian/ResX-Aggregator/issues/1)
+
+**Develop**
+
+You need to run ~/Tools/vssdk_full(2013).exe to install visual studio SDK to open the VSIX project in Visual Studio 2013.
