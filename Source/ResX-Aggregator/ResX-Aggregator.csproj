@@ -253,6 +253,10 @@
       <Project>{5C8E0F9A-B419-4F84-9F75-F351A773A634}</Project>
       <Name>FileSystemHelpers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ZiZhuJY.UI\ZiZhuJY.UI.csproj">
+      <Project>{8b3f1311-df0c-4c5f-8243-85ea99b7beea}</Project>
+      <Name>ZiZhuJY.UI</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="RichEditObjectModel">

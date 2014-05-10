@@ -123,10 +123,6 @@
   <data name="Header" xml:space="preserve">
     <value>关于我</value>
   </data>
-  <data name="Message" xml:space="preserve">
-    <value>&lt;p&gt;2011年4月份，我来到上海紫竹科学园区，开始了程序员的生涯，踏上了我梦寐已求了 8 年的人生里程碑。特开此网站——紫竹叽歪——以表记念。&lt;/p&gt;
-&lt;p&gt;格言：&lt;strong&gt;人生如梦，要梦就梦得大些！&lt;/strong&gt;（改编自《盗梦空间》中的一句台词）&lt;/p&gt;</value>
-  </data>
   <data name="MyWork" xml:space="preserve">
     <value>我的工作：</value>
   </data>
@@ -145,23 +141,14 @@
   <data name="SocialLinks.Label.Facebook" xml:space="preserve">
     <value>脸谱：</value>
   </data>
-  <data name="SocialLinks.Label.QQ" xml:space="preserve">
-    <value>QQ：</value>
-  </data>
   <data name="SocialLinks.Label.Renren" xml:space="preserve">
     <value>人人：</value>
-  </data>
-  <data name="SocialLinks.Label.Weibo" xml:space="preserve">
-    <value>新浪微博：</value>
   </data>
   <data name="SocialLinks.Title.Facebook" xml:space="preserve">
     <value>Jeff Tian</value>
   </data>
   <data name="SoialLinks.Title.Renren" xml:space="preserve">
     <value>田杰</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>关于我，关于紫竹叽歪……</value>
   </data>
   <data name="test" xml:space="preserve">
     <value>3</value>

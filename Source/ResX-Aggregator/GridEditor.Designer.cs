@@ -1,4 +1,6 @@
-﻿namespace ZiZhuJY.ResX_Aggregator
+﻿using ZiZhuJY.UI.UserControl;
+
+namespace ZiZhuJY.ResX_Aggregator
 {
     partial class GridEditor
     {
@@ -29,11 +31,11 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            this._dataGridControl = new System.Windows.Forms.DataGridView();
+            this._dataGridControl = new ExcelDataGridView();
             ((System.ComponentModel.ISupportInitialize)(this._dataGridControl)).BeginInit();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // _dataGridControl
             // 
             this._dataGridControl.AllowUserToOrderColumns = true;
             this._dataGridControl.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
@@ -49,12 +51,13 @@
             this._dataGridControl.DefaultCellStyle = dataGridViewCellStyle1;
             this._dataGridControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this._dataGridControl.Location = new System.Drawing.Point(0, 0);
-            this._dataGridControl.Name = "DataGridControl";
+            this._dataGridControl.Name = "_dataGridControl";
             this._dataGridControl.RowTemplate.Height = 23;
             this._dataGridControl.Size = new System.Drawing.Size(1253, 538);
             this._dataGridControl.TabIndex = 0;
             this._dataGridControl.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellMouseEnter);
             this._dataGridControl.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellValueChanged);
+            this._dataGridControl.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this._dataGridControl_EditingControlShowing);
             this._dataGridControl.BindingContextChanged += new System.EventHandler(this.dataGridView1_BindingContextChanged);
             this._dataGridControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridView1_KeyDown);
             this._dataGridControl.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.dataGridView1_KeyPress);

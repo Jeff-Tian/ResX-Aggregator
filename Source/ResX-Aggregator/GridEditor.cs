@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using ZiZhuJY.ResX_Aggregator.Core;
+using ZiZhuJY.UI.UserControl;
 using zizhujycom.ResX_Aggregator;
 
 namespace ZiZhuJY.ResX_Aggregator
@@ -27,9 +28,9 @@ namespace ZiZhuJY.ResX_Aggregator
             m_Recorder = new VSMacroRecorder(GuidList.guidResX_AggregatorEditorFactory);
         }
 
-        private DataGridView _dataGridControl;
+        private ExcelDataGridView _dataGridControl;
 
-        public DataGridView DataGridControl
+        public ExcelDataGridView DataGridControl
         {
             get
             {
@@ -306,6 +307,8 @@ namespace ZiZhuJY.ResX_Aggregator
             if (m_resxAgg == null) return;
 
             m_resxAgg.Save();
+
+            isDirty = false;
         }
 
         public void LoadFile(string fileName)
@@ -341,6 +344,36 @@ namespace ZiZhuJY.ResX_Aggregator
         {
             isDirty = true;
             //MessageBox.Show("Cell value changed.");
+        }
+
+        /// <summary>
+        /// Capture the key press event inside a cell
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _dataGridControl_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            e.Control.KeyDown += new KeyEventHandler(dataGridViewTextBox_KeyDown);
+            e.Control.KeyPress += new KeyPressEventHandler(dataGridViewTextBox_KeyPress);
+        }
+
+        public event KeyPressEventHandler CellKeyPressed;
+        public event KeyEventHandler CellKeyDown;
+
+        private void dataGridViewTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (CellKeyPressed != null)
+            {
+                CellKeyPressed(sender, e);
+            }
+        }
+
+        private void dataGridViewTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (CellKeyDown != null)
+            {
+                CellKeyDown(sender, e);
+            }
         }
     }
 }

@@ -207,10 +207,6 @@ namespace ZiZhuJY.ResX_Aggregator
 
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GridEditorPane));
             this.editorControl = new GridEditor();
-            this.editorControl.TextChanged += (sender, args) =>
-            {
-                this.isDirty = true;
-            };
 
             resources.ApplyResources(this.editorControl, "editorControl", CultureInfo.CurrentUICulture);
             // Event handlers for macro recording.
@@ -218,6 +214,8 @@ namespace ZiZhuJY.ResX_Aggregator
             this.editorControl.DataGridControl.MouseDown += new MouseEventHandler(this.OnMouseClick);
             this.editorControl.DataGridControl.SelectionChanged += new EventHandler(this.OnSelectionChanged);
             this.editorControl.DataGridControl.KeyDown += new KeyEventHandler(this.OnKeyDown);
+            this.editorControl.CellKeyDown += new KeyEventHandler(this.OnCellKeyDown);
+            this.editorControl.CellKeyPressed += new KeyPressEventHandler(this.OnCellKeyPress);
 
             // Handle Focus event
             this.editorControl.DataGridControl.GotFocus += new EventHandler(this.OnGotFocus);
@@ -297,7 +295,11 @@ namespace ZiZhuJY.ResX_Aggregator
 
                     if (editorControl != null)
                     {
-                        editorControl.DataGridControl.Dispose();
+                        if (editorControl.DataGridControl != null)
+                        {
+                            editorControl.DataGridControl.Dispose();
+                        }
+
                         editorControl.Dispose();
                         editorControl = null;
                     }
@@ -556,9 +558,52 @@ namespace ZiZhuJY.ResX_Aggregator
         /// </summary>
         private void onDelete(object sender, EventArgs e)
         {
-            for (var i = 0; i < editorControl.DataGridControl.SelectedRows.Count; i++)
+            if (editorControl.DataGridControl.SelectedRows.Count > 0)
             {
-                editorControl.DataGridControl.Rows.RemoveAt(editorControl.DataGridControl.SelectedRows[i].Index);
+                for (var i = 0; i < editorControl.DataGridControl.SelectedRows.Count; i++)
+                {
+                    editorControl.DataGridControl.Rows.RemoveAt(editorControl.DataGridControl.SelectedRows[i].Index);
+                }
+
+                OnTextChange(editorControl.DataGridControl.SelectedRows, new KeyEventArgs(Keys.Delete));
+            }
+            else
+            {
+                // No row was selected, then this is a in-cell delete case
+                var currentCell = editorControl.DataGridControl.CurrentCell;
+                if (currentCell.IsInEditMode)
+                {
+                    var editingControl = editorControl.DataGridControl.EditingControl;
+                    if (editingControl is TextBox)
+                    {
+                        var textBox = editingControl as TextBox;
+                        var oldText = textBox.Text;
+                        var selStart = textBox.SelectionStart;
+                        var selLength = textBox.SelectionLength;
+                        if (selLength < 1) selLength = 1;
+                        var newText = oldText.Substring(0, selStart);
+
+                        if (selStart + selLength < oldText.Length)
+                        {
+                            newText += oldText.Substring(selStart + selLength);
+                        }
+
+                        textBox.Text = newText;
+                        textBox.SelectionStart = selStart;
+
+                        OnTextChange(textBox, new KeyEventArgs(Keys.Delete));
+                    }
+                }
+                else
+                {
+                    // Delete all the text
+                    if (!currentCell.ReadOnly)
+                    {
+                        currentCell.Value = string.Empty;
+
+                        OnTextChange(currentCell, new KeyEventArgs(Keys.Delete));
+                    }
+                }
             }
 
             editorControl.RecordCommand("Delete");
@@ -2302,7 +2347,7 @@ namespace ZiZhuJY.ResX_Aggregator
             }
             else
             {
-                
+                isDirty = true;
             }
         }
 
@@ -2389,6 +2434,16 @@ namespace ZiZhuJY.ResX_Aggregator
                 // Call the function to update the status bar insert mode
                 SetStatusBarInsertMode();
             }
+        }
+
+        private void OnCellKeyPress(object sender, KeyPressEventArgs e)
+        {
+            
+        }
+
+        private void OnCellKeyDown(object sender, KeyEventArgs e)
+        {
+            
         }
 
         /// <summary>
