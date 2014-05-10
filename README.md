@@ -23,14 +23,15 @@ Now with ResXAggregator, you can add a file that named "index.cshtml.resx-aggreg
 
 **Screenshot**
 
-![Screenshot for ResXAggregator's UI](ResX-Aggregator/Templates/ResXAggregator.png "Screenshot for ResXAggregator's UI")
+![Screenshot for ResXAggregator's UI](Source/ResX-Aggregator/Templates/ResXAggregator.png "Screenshot for ResXAggregator's UI")
 
-![Use ResX-Aggregator in BlogEngine.NET project](ResX-Aggregator/Templates/Use ResXAggregator in BlogEngine.NET.png "Use ResX-Aggregator in BlogEngine.NET project")
+![Use ResX-Aggregator in BlogEngine.NET project](Source/ResX-Aggregator/Templates/Use ResXAggregator in BlogEngine.NET.png "Use ResX-Aggregator in BlogEngine.NET project")
 
 **Release Notes**
 
 v1.4	2014-5-10
 - Support more visual studio versions.
+- New ["When contents get modified, add a * next to the tab title."](https://github.com/Jeff-Tian/ResX-Aggregator/issues/5)
 
 V1.3	2014-2-14
 - Fixed ["Can't copy the text inside the cells #3"](https://github.com/Jeff-Tian/ResX-Aggregator/issues/3)
