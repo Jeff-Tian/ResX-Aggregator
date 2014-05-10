@@ -159,6 +159,23 @@ namespace ZiZhuJY.ResX_Aggregator
 
         protected override void OnClose()
         {
+            if (isDirty)
+            {
+                var result =
+                    MessageBox.Show("There are unsaved changes, do you want to save them before closing?",
+                        "ResX-Aggregator", MessageBoxButtons.YesNoCancel);
+
+                if (result == DialogResult.Yes)
+                {
+                    editorControl.SaveFile();
+                }
+
+                if (result == DialogResult.Cancel)
+                {
+                    return;
+                }
+            }
+
             editorControl.StopRecorder();
 
             base.OnClose();
@@ -2195,7 +2212,7 @@ namespace ZiZhuJY.ResX_Aggregator
             }
             Guid packageGuid = myPackage.GetType().GUID;
             int hr = resourceManager.LoadResourceString(ref packageGuid, -1, resourceName, out resourceValue);
-            Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(hr);
+            ErrorHandler.ThrowOnFailure(hr);
             return resourceValue;
         }
 

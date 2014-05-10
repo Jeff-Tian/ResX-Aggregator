@@ -291,7 +291,7 @@ namespace ZiZhuJY.ResX_Aggregator
 
         #region Business methods
 
-        public void SaveFile(string fileName)
+        public void SaveFile(string fileName = null)
         {
             if (m_resxAgg == null) return;
 
