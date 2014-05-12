@@ -14,15 +14,20 @@
             {
                 if (this.CurrentCell != null)
                 {
-                    MessageBox.Show("Ctrl+C: " + this.CurrentCell.Value);
-                    return true;
+                    //MessageBox.Show("Ctrl+C: " + this.CurrentCell.Value);
+                    //return true;
+                    return false;
+                }
+                else
+                {
+                    return false;
                 }
             }
             else if (keyData == (Keys.Control | Keys.V))
             {
-
-                MessageBox.Show("Ctrl+V:" + this.CurrentCell.Value);
-                return true;
+                //MessageBox.Show("Ctrl+V:" + this.CurrentCell.Value);
+                //return true;
+                return false;
             }
 
             if (msg.WParam.ToInt32().Equals(46)) 

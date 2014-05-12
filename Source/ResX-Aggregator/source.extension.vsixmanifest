@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="74ffe834-3a9f-4aa8-a53e-e3b0348d1925" Version="1.4" Language="en-US" Publisher="zizhujy.com" />
+    <Identity Id="74ffe834-3a9f-4aa8-a53e-e3b0348d1925" Version="1.5" Language="en-US" Publisher="zizhujy.com" />
     <DisplayName>ResX-Aggregator</DisplayName>
     <Description xml:space="preserve">Easy the resource(.resx) file editing. Aggregate all the different culutre resource files into a single editor. And when you are done with editing, you can save them back to the different culutre resource files automatically.</Description>
     <MoreInfo>https://github.com/Jeff-Tian/ResX-Aggregator</MoreInfo>

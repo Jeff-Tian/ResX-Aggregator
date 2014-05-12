@@ -15,6 +15,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 using tom;
+using ZiZhuJY.Helpers;
 using zizhujycom.ResX_Aggregator;
 
 namespace ZiZhuJY.ResX_Aggregator
@@ -1265,7 +1266,7 @@ namespace ZiZhuJY.ResX_Aggregator
                             {
                                 stringContents += "\n";
                             }
-                            else if(lastCol != -1 && col != lastCol)
+                            else if (lastCol != -1 && col != lastCol)
                             {
                                 stringContents += "\t";
                             }
@@ -2343,7 +2344,7 @@ namespace ZiZhuJY.ResX_Aggregator
 
             if (isDirty)
             {
-                
+
             }
             else
             {
@@ -2425,6 +2426,10 @@ namespace ZiZhuJY.ResX_Aggregator
         /// <param name="e"> KeyEventArgs instance that we will use to get the key that was pressed.</param>
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
+            // Get the IVsStatusBar interface
+            var statusBar = GetService(typeof(SVsStatusbar)) as IVsStatusbar;
+            var gridView = sender as DataGridView;
+
             // If the key pressed is the insert key...
             if (e.KeyValue == 45)
             {
@@ -2434,16 +2439,99 @@ namespace ZiZhuJY.ResX_Aggregator
                 // Call the function to update the status bar insert mode
                 SetStatusBarInsertMode();
             }
+            else if (e.KeyValue == 17 && e.Modifiers == Keys.Control)
+            {
+                // Ctrl + C
+                if (gridView != null)
+                {
+                    var text = gridView.CurrentCell.Value.ToString();
+                    if (!string.IsNullOrEmpty(text))
+                    {
+                        Clipboard.SetText(text);
+                    }
+                }
+            }
+            else if (e.KeyValue == 86 && e.Modifiers == Keys.Control)
+            {
+                // Ctrl + V
+                if (gridView != null)
+                {
+                    var currentValue = gridView.CurrentCell.Value;
+                    var copiedText = Clipboard.GetText();
+                    if (statusBar != null)
+                    {
+                        statusBar.SetText("Pasting: {0}".FormatWith(copiedText));
+                    }
+
+                    var currentCell = gridView.CurrentCell;
+                    if (currentCell != null)
+                    {
+                        currentCell.Value = copiedText;
+                    }
+
+                    if (!currentValue.Equals(gridView.CurrentCell.Value))
+                    {
+                        this.isDirty = true;
+                    }
+                }
+            }
+            else if (e.KeyValue == 40 && e.Modifiers == Keys.None)
+            {
+                // Down
+                if (gridView != null)
+                {
+                    var currentCell = gridView.CurrentCell;
+                    if (currentCell.RowIndex < gridView.RowCount - 1)
+                    {
+                        var nextRow = gridView.Rows[currentCell.RowIndex + 1];
+                        if (nextRow.Cells.Count > currentCell.ColumnIndex)
+                        {
+                            gridView.CurrentCell = nextRow.Cells[currentCell.ColumnIndex];
+                            gridView.CurrentCell.Selected = true;
+                        }
+                    }
+                }
+            }
+            else if (e.KeyValue == 38 && e.Modifiers == Keys.None)
+            {
+                // Up
+                if (gridView != null)
+                {
+                    var currentCell = gridView.CurrentCell;
+                    if (currentCell.RowIndex > 0)
+                    {
+                        var prevRow = gridView.Rows[currentCell.RowIndex - 1];
+                        if (prevRow.Cells.Count > currentCell.ColumnIndex)
+                        {
+                            gridView.CurrentCell = prevRow.Cells[currentCell.ColumnIndex];
+                            gridView.CurrentCell.Selected = true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                var message = "KeyValue is {0}, Modifiers: {1}.".FormatWith(e.KeyValue, e.Modifiers.ToString());
+
+                if (statusBar == null)
+                {
+                    //MessageBox.Show(message);
+                }
+                else
+                {
+                    statusBar.SetText(message);
+                }
+            }
         }
 
         private void OnCellKeyPress(object sender, KeyPressEventArgs e)
         {
-            
+
         }
 
         private void OnCellKeyDown(object sender, KeyEventArgs e)
         {
-            
+
         }
 
         /// <summary>

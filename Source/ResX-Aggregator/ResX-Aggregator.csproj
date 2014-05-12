@@ -249,6 +249,10 @@
       <Project>{3E82BA31-6DCF-4C61-9AC3-D15EEB501CCE}</Project>
       <Name>Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\externals\ZiZhuJY.Helpers\ZiZhuJY.Helpers.csproj">
+      <Project>{EF12EE0D-B078-4095-94E2-9DFCDBE3E7B2}</Project>
+      <Name>ZiZhuJY.Helpers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FileSystemHelpers\FileSystemHelpers.csproj">
       <Project>{5C8E0F9A-B419-4F84-9F75-F351A773A634}</Project>
       <Name>FileSystemHelpers</Name>
