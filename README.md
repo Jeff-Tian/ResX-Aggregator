@@ -29,6 +29,10 @@ Now with ResXAggregator, you can add a file that named "index.cshtml.resx-aggreg
 
 **Release Notes**
 
+v.15    2014-5-12
+- Support up and down navigation between rows
+- Fixed ["Support Ctrl+C and Ctrl+V."](https://github.com/Jeff-Tian/ResX-Aggregator/issues/11)
+
 v1.4	2014-5-10
 - Support more visual studio versions.
 - New ["When contents get modified, add a * next to the tab title."](https://github.com/Jeff-Tian/ResX-Aggregator/issues/5)
